@@ -13,12 +13,19 @@ constantFiles.keys().forEach((key) => {
   if (key === './index.ts') return
   constantModules = constantModules.concat(constantFiles(key).default)
 })
-
 const asyncFiles = require.context('./permissionModules', true, /\.ts$/)
 let permissionModules: Array<RouteRecordRaw> = []
 asyncFiles.keys().forEach((key) => {
   if (key === './index.ts') return
   permissionModules = permissionModules.concat(asyncFiles(key).default)
+})
+
+// 测试路由
+const testFiles = require.context('./testRouter', true, /\.ts$/)
+console.log(testFiles, 'testFiles')
+let testModules: Array<RouteRecordRaw> = []
+testFiles.keys().forEach((key) => {
+  testModules = testModules.concat(testFiles(key).default)
 })
 
 export const constantRoutes: Array<RouteRecordRaw> = [
@@ -50,7 +57,24 @@ export const constantRoutes: Array<RouteRecordRaw> = [
       }
     ]
   },
-  ...constantModules
+  // {
+  //   path: '/',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'test',
+  //       component: () => import(/* webpackChunkName: "dashboard" */ '@/views/test/index.vue'),
+  //       name: 'test',
+  //       meta: {
+  //         title: 'test',
+  //         icon: '#icondashboard',
+  //         affix: true
+  //       }
+  //     }
+  //   ]
+  // },
+  ...constantModules,
+  ...testModules
 ]
 
 export const asyncRoutes: Array<RouteRecordRaw> = [
